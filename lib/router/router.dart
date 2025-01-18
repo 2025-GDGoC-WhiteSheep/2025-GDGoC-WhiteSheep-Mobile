@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/navigator.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Designer/graphic.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Designer/inHouse.dart';
@@ -32,7 +33,7 @@ final GoRouter router = GoRouter(routes: [
   // 기획자 3개 요소
   GoRoute(
     path: '/PM',
-    builder: (context, state) => const pmPage(),
+    builder: (context, state) => pmPage(),
   ),
   GoRoute(
     path: '/APP',
@@ -58,8 +59,29 @@ final GoRouter router = GoRouter(routes: [
   // 디자이너 3개 요소
   GoRoute(
     path: '/UIUX',
-    builder: (context, state) => uiUx(),
+    builder: (context, state) {
+      final boards = state.extra as List<Map<String, dynamic>>?; // 전달받은 데이터
+
+      if (boards == null) {
+        // 데이터가 없는 경우 에러 메시지 표시
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: const Color(0xFF1C1C21),
+            title: Text('K-word', style: TextStyle(color: Colors.white)),
+          ),
+          body: Center(
+            child: Text(
+              '데이터를 불러올 수 없습니다.',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      }
+
+      return uiUx(boards: boards); // 데이터를 uiUx로 전달
+    },
   ),
+
   GoRoute(
     path: '/GRAPHIC',
     builder: (context, state) => graphic(),

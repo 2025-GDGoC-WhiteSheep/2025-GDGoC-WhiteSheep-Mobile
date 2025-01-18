@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/my_profile/my_profile.dart';
 
 class webMake extends StatefulWidget {
   const webMake({super.key});
@@ -13,7 +14,7 @@ class _webMakeState extends State<webMake> {
   final List<Widget> _tabs = [
     Center(child: Text('홈')), // 홈 탭
     Center(child: Text('탐색')), // 탐색 탭 (현재 페이지)
-    Center(child: Text('마이 프로필')), // 마이 프로필 탭
+    MyProfileScreen(), // 마이 프로필 탭
   ];
 
   void _onTap(int index) {

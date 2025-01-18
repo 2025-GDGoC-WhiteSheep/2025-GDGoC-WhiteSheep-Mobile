@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 
 class KeywordPage extends StatefulWidget {
   @override
@@ -102,7 +104,7 @@ class _KeywordPageState extends State<KeywordPage> {
               spacing: 10,
               runSpacing: 10,
               children: [
-                _buildButton('+ UI/UX디자인', '/UIUX'),
+                _buildButtonWithApi('+ UI/UX디자인', '/UIUX', 'UI/UX디자인'),
                 _buildButton('+ 그래픽 디자인', '/GRAPHIC'),
                 _buildButton('+ 인하우스', '/INHOUSE'),
               ],
@@ -113,7 +115,7 @@ class _KeywordPageState extends State<KeywordPage> {
     );
   }
 
-  // 추천 항목을 나타내는 둥근 버튼 형태
+  // 기존 버튼 빌드 함수 (API 호출 없음)
   Widget _buildButton(String label, String route) {
     return ElevatedButton(
       onPressed: () {
@@ -130,5 +132,52 @@ class _KeywordPageState extends State<KeywordPage> {
         style: TextStyle(color: Colors.white, fontSize: 14),
       ),
     );
+  }
+
+  // UI/UX 버튼 빌드 함수 (API 호출 포함)
+  Widget _buildButtonWithApi(String label, String route, String keyword) {
+    return ElevatedButton(
+      onPressed: () async {
+        final response = await _fetchBoards(keyword);
+        if (response != null) {
+          context.go(route, extra: response); // 데이터 전달
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey.shade800, // 버튼 배경색
+        shape: StadiumBorder(), // 둥근 모양
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(color: Colors.white, fontSize: 14),
+      ),
+    );
+  }
+
+  // API 호출 함수
+  Future<List<Map<String, dynamic>>?> _fetchBoards(String keyword) async {
+    final url =
+        Uri.parse('http://192.168.187.6:8081/info/boards?keyword=$keyword');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        print("------------");
+        print("headers : ${response.headers}");
+        final responseBody = utf8.decode(response.bodyBytes);
+        final jsonResponse = json.decode(responseBody);
+
+        print(jsonResponse.toString());
+        return (jsonResponse['boards'] as List)
+            .map((item) => {
+                  'url': item['url'],
+                  'name': item['name'],
+                })
+            .toList();
+      }
+    } catch (e) {
+      print('API 호출 실패: $e');
+    }
+    return null;
   }
 }

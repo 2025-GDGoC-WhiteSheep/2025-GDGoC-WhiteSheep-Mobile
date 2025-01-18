@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
 
-class uiUx extends StatefulWidget {
-  const uiUx({super.key});
+class uiUx extends StatelessWidget {
+  final List<Map<String, dynamic>> boards; // 전달받은 데이터
 
-  @override
-  State<uiUx> createState() => _uiUxState();
-}
-
-class _uiUxState extends State<uiUx> {
-  int _currentIndex = 1; // 현재 선택된 탭 설정 (탐색 탭)
-
-  final List<Widget> _tabs = [
-    Center(child: Text('홈')), // 홈 탭
-    Center(child: Text('탐색')), // 탐색 탭 (현재 페이지)
-    Center(child: Text('마이 프로필')), // 마이 프로필 탭
-  ];
-
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  const uiUx({super.key, required this.boards});
 
   @override
   Widget build(BuildContext context) {
+    // 이미지 파일 경로 리스트 (1.png ~ 6.png)
+    final imagePaths = [
+      'assets/images/1.png',
+      'assets/images/2.png',
+      'assets/images/3.png',
+      'assets/images/4.png',
+      'assets/images/5.png',
+      'assets/images/6.png',
+    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C1C21),
@@ -41,25 +33,61 @@ class _uiUxState extends State<uiUx> {
             ),
           ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.search, color: Colors.white),
-          ),
-        ],
       ),
-      body: _tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF212429), // Navigation Bar 색상 변경
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.white, // 선택된 아이템 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템 색상
-        onTap: _onTap,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: '탐색'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이 프로필'),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // 2열 그리드
+            crossAxisSpacing: 16, // 열 간격
+            mainAxisSpacing: 16, // 행 간격
+          ),
+          itemCount: boards.length,
+          itemBuilder: (context, index) {
+            final board = boards[index];
+            final imagePath =
+                imagePaths[index % imagePaths.length]; // 이미지 파일 순환
+
+            return GestureDetector(
+              onTap: () {
+                // 이미지를 클릭하면 URL 출력
+                final url = board['url'] ?? 'URL 없음';
+                print('클릭한 URL: $url');
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 이미지 공간 (로컬 이미지 사용)
+                  Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  // 이름 출력
+                  Text(
+                    board['name'] ?? '이름 없음',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
