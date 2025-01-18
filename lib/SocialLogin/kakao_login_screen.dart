@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:http/http.dart' as http; // HTTP 요청 패키지
 
 class KakaoLoginScreen extends StatefulWidget {
   @override
@@ -10,11 +12,20 @@ class KakaoLoginScreen extends StatefulWidget {
 class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
   Future<void> _loginWithKakao() async {
     try {
+      // 카카오톡 또는 카카오 계정으로 로그인
       if (await isKakaoTalkInstalled()) {
         await UserApi.instance.loginWithKakaoTalk();
       } else {
         await UserApi.instance.loginWithKakaoAccount();
       }
+
+      // 로그인 성공 후 사용자 정보 가져오기
+      User user = await UserApi.instance.me();
+      print('User ID: ${user.id}'); // 사용자 고유 ID 확인
+
+      // 백엔드로 사용자 ID 전송
+      await _sendUserIdToBackend(user.id);
+
       // 로그인 성공 후 /keywordsPage로 이동
       GoRouter.of(context).go('/keywordsPage');
     } catch (e) {
@@ -22,26 +33,61 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
     }
   }
 
+  Future<void> _sendUserIdToBackend(int userId) async {
+    const backendUrl = 'https://your-backend-url.com/api/user'; // 백엔드 URL 설정
+
+    try {
+      final response = await http.post(
+        Uri.parse(backendUrl),
+        headers: {'Content-Type': 'application/json'}, // JSON 형식으로 전송
+        body: jsonEncode({'userId': userId}),
+      );
+      if (response.statusCode == 200) {
+        print('사용자 ID 전송 성공: ${response.body}');
+      } else {
+        print('사용자 ID 전송 실패: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('백엔드 전송 중 오류 발생: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x1C1C21),
+      backgroundColor: const Color(0xFF1C1C21), // 배경색
       appBar: AppBar(
-        title: Text('Kakao Login'),
+        title: const Text('Kakao Login'),
       ),
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/3dicons-pencil-dynamic-color.png',
-            width: 100,
-            height: 100,
-          ),
-          const SizedBox(height: 20),
-          // const Text(),
-        ],
-      )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/3dicons-pencil-dynamic-color.png',
+              width: 200,
+              height: 200,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '소셜로그인 방식으로 시작하기',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: _loginWithKakao,
+              child: Image.asset(
+                'assets/images/kakao_login.png',
+                width: 300,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
