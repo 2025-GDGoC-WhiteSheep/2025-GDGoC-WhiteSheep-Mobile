@@ -68,6 +68,7 @@ final GoRouter router = GoRouter(routes: [
     path: '/INHOUSE',
     builder: (context, state) => inHouse(),
   ),
+  GoRoute(
     path: '/MainScreen',
     builder: (context, state) => MainScreen(),
   ),
