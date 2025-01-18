@@ -27,7 +27,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
       await _sendUserIdToBackend(user.id);
 
       // 로그인 성공 후 /keywordsPage로 이동
-      GoRouter.of(context).go('/keywordsPage');
+      GoRouter.of(context).go('/MainScreen');
     } catch (e) {
       print('로그인 실패: $e');
     }
