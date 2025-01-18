@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/my_profile/my_profile.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:gdgoc2025whitesheepmobile/router/router.dart';
 
@@ -13,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _tabs = [
     Center(child: Text('홈')),
     Center(child: Text('탐색')),
-    Center(child: Text('마이 프로필')),
+    MyProfileScreen(),
   ];
 
   @override
