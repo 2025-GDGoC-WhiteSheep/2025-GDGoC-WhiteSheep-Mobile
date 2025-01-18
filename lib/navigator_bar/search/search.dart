@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class KeywordPage extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class KeywordPage extends StatefulWidget {
 
 class _KeywordPageState extends State<KeywordPage> {
   final TextEditingController _controller = TextEditingController();
+  List<dynamic> _galleryItems = []; // 서버에서 받은 데이터 저장
 
   @override
   Widget build(BuildContext context) {
@@ -64,49 +67,12 @@ class _KeywordPageState extends State<KeywordPage> {
               spacing: 10,
               runSpacing: 10,
               children: [
-                _buildButton('+ PM', '/PM'),
-                _buildButton('+ 앱 기획', '/APP'),
-                _buildButton('+ 웹 기획', '/WEB'),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              '개발자',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                _buildButton('+ 프론트', '/FRONT'),
-                _buildButton('+ 백엔드', '/BACK'),
-                _buildButton('+ 풀스택', '/FULL'),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              '디자이너',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
                 _buildButton('+ UI/UX디자인', '/UIUX'),
-                _buildButton('+ 그래픽 디자인', '/GRAPHIC'),
-                _buildButton('+ 인하우스', '/INHOUSE'),
+                // 다른 버튼들
               ],
             ),
+            SizedBox(height: 20),
+            if (_galleryItems.isNotEmpty) _buildGallery(), // 갤러리 데이터가 있을 경우 표시
           ],
         ),
       ),
@@ -116,9 +82,9 @@ class _KeywordPageState extends State<KeywordPage> {
   // 추천 항목을 나타내는 둥근 버튼 형태
   Widget _buildButton(String label, String route) {
     return ElevatedButton(
-      onPressed: () {
-        // 지정된 경로로 이동
-        context.go(route);
+      onPressed: () async {
+        // 키워드를 백엔드로 전송하고 응답 처리
+        await _fetchGalleryData(label);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.grey.shade800, // 버튼 배경색
@@ -128,6 +94,64 @@ class _KeywordPageState extends State<KeywordPage> {
       child: Text(
         label,
         style: TextStyle(color: Colors.white, fontSize: 14),
+      ),
+    );
+  }
+
+  // 백엔드에서 키워드에 해당하는 데이터를 가져오는 함수
+  Future<void> _fetchGalleryData(String keyword) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.187.6:8081/info/boards?keyword=${keyword}'), // 실제 URL로 변경
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        _galleryItems = data;
+      });
+    } else {
+      // 실패 시 처리
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('갤러리 데이터를 불러오지 못했습니다')),
+      );
+    }
+  }
+
+  // 갤러리 형식으로 데이터 표시
+  Widget _buildGallery() {
+    return Expanded(
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // 3개의 열로 구성된 그리드
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemCount: _galleryItems.length,
+        itemBuilder: (context, index) {
+          final item = _galleryItems[index];
+          return Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(item['imageUrl']), // 이미지 URL
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                item['name'], // 이름
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.black54, // 텍스트 배경
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
