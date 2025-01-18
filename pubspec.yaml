@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   kakao_flutter_sdk_user: ^1.9.6
+  kakao_flutter_sdk: ^1.2.3
   go_router: ^14.6.3
   http: ^1.2.2
   curved_labeled_navigation_bar: ^2.0.5
