@@ -9,7 +9,7 @@ final GoRouter router = GoRouter(routes: [
     // builder: (context, state) => KakaoLoginScreen(),
   ),
   GoRoute(
-    path: '/keywordsPage',
+    path: '/MainScreen',
     builder: (context, state) => MainScreen(),
   ),
 ]);
