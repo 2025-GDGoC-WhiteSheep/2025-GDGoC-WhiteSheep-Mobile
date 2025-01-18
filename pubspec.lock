@@ -284,10 +284,18 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
+      sha256: bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.15.0"
+  motion_tab_bar_v2:
+    dependency: "direct main"
+    description:
+      name: motion_tab_bar_v2
+      sha256: "738dbbf3f2397c16d9a58f53d1090ea7501d697030aad92e06a6dec3237f39ae"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   path:
     dependency: transitive
     description:
@@ -494,5 +502,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
-
+  dart: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
