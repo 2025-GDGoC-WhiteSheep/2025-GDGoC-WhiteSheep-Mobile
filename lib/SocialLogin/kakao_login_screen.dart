@@ -26,12 +26,13 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
 
       //프론트에 정보 저장
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nickname', user.kakaoAccount?.profile?.nickname ?? '');
+      await prefs.setString(
+          'nickname', user.kakaoAccount?.profile?.nickname ?? '');
       await prefs.setString('userId', user.id.toString());
       print('유저 정보 저장 완료!');
 
       // 백엔드로 사용자 ID 전송
-      await _sendUserIdToBackend(user.id);
+      // await _sendUserIdToBackend(user.id);
 
       // 로그인 성공 후 /MainScreen로 이동
       GoRouter.of(context).go('/MainScreen');

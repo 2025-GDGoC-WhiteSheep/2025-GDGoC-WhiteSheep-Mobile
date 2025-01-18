@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/home.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/search.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/my_profile/my_profile.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -14,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    Center(child: Text('홈')),
+    HomePage(),
     KeywordPageWrapper(), // Wrapping KeywordPage to retain navigation bar
     MyProfileScreen(),
   ];

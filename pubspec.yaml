@@ -43,6 +43,8 @@ dependencies:
   motion_tab_bar_v2: ^0.3.0
   shared_preferences: ^2.3.5
   google_fonts: ^6.2.1
+  url_launcher: ^6.3.1
+  font_awesome_flutter: ^10.8.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +77,12 @@ flutter:
     - assets/images/4.png
     - assets/images/5.png
     - assets/images/6.png
+    - assets/images/congratu.png
+    - assets/images/climb.png
+    - assets/images/computer.png
+    - assets/images/dance.png
+    - assets/images/2222.png
+    - assets/images/3333.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfileScreen extends StatefulWidget {
@@ -127,7 +128,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
                   child: ElevatedButton(
-                    onPressed: () {}, // 버튼 동작은 추가하지 않음
+                    onPressed: () {
+                      context.go('/ranking');
+                    }, // 버튼 동작은 추가하지 않음
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF292929), // 배경색
                       shape: RoundedRectangleBorder(

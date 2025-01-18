@@ -162,8 +162,7 @@ class _KeywordPageState extends State<KeywordPage> {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        print("------------");
-        print("headers : ${response.headers}");
+        // UTF-8로 수동 디코딩
         final responseBody = utf8.decode(response.bodyBytes);
         final jsonResponse = json.decode(responseBody);
 
@@ -174,6 +173,8 @@ class _KeywordPageState extends State<KeywordPage> {
                   'name': item['name'],
                 })
             .toList();
+      } else {
+        print('서버 오류: ${response.statusCode}');
       }
     } catch (e) {
       print('API 호출 실패: $e');

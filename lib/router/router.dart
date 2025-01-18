@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gdgoc2025whitesheepmobile/SocialLogin/splash.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/dontwatch.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/my_profile/ranking.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/navigator.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Designer/graphic.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Designer/inHouse.dart';
@@ -9,7 +12,9 @@ import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/PM/webMake.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Programmer/backend.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Programmer/front.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/Programmer/fullStack.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/missionPage/mission.dart';
 import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/search.dart';
+import 'package:gdgoc2025whitesheepmobile/navigator_bar/search/selectmission.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gdgoc2025whitesheepmobile/SocialLogin/kakao_login_screen.dart';
 
@@ -17,9 +22,12 @@ import '../navigator_bar/my_profile/my_profile.dart';
 
 final GoRouter router = GoRouter(routes: [
   GoRoute(
-    path: '/', // 카카오 로그인 화면
+    path: '/',
+    builder: (context, state) => SplashScreen(),
+  ),
+  GoRoute(
+    path: '/login', // 카카오 로그인 화면
     builder: (context, state) => KakaoLoginScreen(),
-    // builder: (context, state) => KakaoLoginScreen(),
   ),
   GoRoute(
     path: '/keywordsPage',
@@ -97,5 +105,24 @@ final GoRouter router = GoRouter(routes: [
   GoRoute(
     path: '/myProfile',
     builder: (context, state) => MyProfileScreen(),
-  )
+  ),
+  GoRoute(
+    path: '/dontwatch',
+    builder: (context, state) => donewatch(),
+  ),
+  GoRoute(
+    path: '/select',
+    builder: (context, state) => const SelectMissionPage(),
+  ),
+  GoRoute(
+    path: '/mission',
+    builder: (context, state) {
+      final level = state.extra as int; // 전달된 level 값 가져오기
+      return MissionPage(level: level);
+    },
+  ),
+  GoRoute(
+    path: '/ranking',
+    builder: (context, state) => RankingPage(),
+  ),
 ]);
