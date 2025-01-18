@@ -4,6 +4,7 @@ import 'package:gdgoc2025whitesheepmobile/router/router.dart';
 
 void main() {
   KakaoSdk.init(nativeAppKey: 'fd1129b7302f5f0877e04483bd504f3f');
+
   runApp(MyApp());
 }
 
