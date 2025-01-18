@@ -33,7 +33,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
       // 백엔드로 사용자 ID 전송
       await _sendUserIdToBackend(user.id);
 
-      // 로그인 성공 후 /keywordsPage로 이동
+      // 로그인 성공 후 /MainScreen로 이동
       GoRouter.of(context).go('/MainScreen');
     } catch (e) {
       print('로그인 실패: $e');
@@ -41,7 +41,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
   }
 
   Future<void> _sendUserIdToBackend(int userId) async {
-    const backendUrl = 'https://your-backend-url.com/api/user'; // 백엔드 URL 설정
+    const backendUrl = 'http://192.168.187.6:8081'; // 백엔드 URL 설정
 
     try {
       final response = await http.post(
