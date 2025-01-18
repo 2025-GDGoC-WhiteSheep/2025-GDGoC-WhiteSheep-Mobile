@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:http/http.dart' as http; // HTTP 요청 패키지
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KakaoLoginScreen extends StatefulWidget {
   @override
@@ -23,6 +23,12 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
       // 로그인 성공 후 사용자 정보 가져오기
       User user = await UserApi.instance.me();
       print('User ID: ${user.id}'); // 사용자 고유 ID 확인
+
+      //프론트에 정보 저장
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('nickname', user.kakaoAccount?.profile?.nickname ?? '');
+      await prefs.setString('userId', user.id.toString());
+      print('유저 정보 저장 완료!');
 
       // 백엔드로 사용자 ID 전송
       await _sendUserIdToBackend(user.id);
